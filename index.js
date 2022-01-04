@@ -14,8 +14,10 @@ const input = document.querySelector("input");
 
 let timeoutID;
 const onInput = (event) => {
-	//search 1sec after event occures
-	setTimeout(() => {
+	if (timeoutID) {
+		clearTimeout(timeoutID);
+	}
+	timeoutID = setTimeout(() => {
 		fetchData(event.target.value);
 	}, 1000);
 };
