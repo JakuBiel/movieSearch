@@ -6,20 +6,16 @@ const fetchData = async (searchTerm) => {
 			s: searchTerm,
 		},
 	});
-	console.log(response.data);
-};
 
-//input
+	return response.data.Search;
+};
+//debounce
 const input = document.querySelector("input");
 
-let timeoutID;
-const onInput = (event) => {
-	if (timeoutID) {
-		clearTimeout(timeoutID);
-	}
-	timeoutID = setTimeout(() => {
-		fetchData(event.target.value);
-	}, 1000);
-};
+const onInput = debounce(async (event) => {
+	const movies = await fetchData(event.target.value);
+	//without await we will return promise, to return array we need await, and if await we need async in front of function too
+	console.log(movies);
+});
 
 input.addEventListener("input", onInput);
