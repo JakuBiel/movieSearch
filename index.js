@@ -1,4 +1,4 @@
-const autoConfigConfig = {
+const autoCompleteConfig = {
 	//how to show every item
 	renderOption(movie) {
 		const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
@@ -7,10 +7,7 @@ const autoConfigConfig = {
 	${movie.Title}  (${movie.Year})
 `;
 	},
-	//what to do if item clicked
-	onOptionSelect(movie) {
-		onMovieSelect(movie);
-	},
+
 	//what to fill in input after click
 	inputValue(movie) {
 		return movie.Title;
@@ -33,24 +30,34 @@ const autoConfigConfig = {
 };
 
 createAutoComplete({
-	...autoConfigConfig,
-
+	...autoCompleteConfig,
+	//what to do if item clicked
 	root: document.querySelector("#left-autocomplete"),
+
+	onOptionSelect(movie) {
+		document.querySelector(".tutorial").classList.add("is-hidden");
+		onMovieSelect(movie, document.querySelector("#left-summary"));
+	},
 });
 createAutoComplete({
-	...autoConfigConfig,
-
+	...autoCompleteConfig,
+	//what to do if item clicked
 	root: document.querySelector("#right-autocomplete"),
+
+	onOptionSelect(movie) {
+		document.querySelector(".tutorial").classList.add("is-hidden");
+		onMovieSelect(movie, document.querySelector("#right-summary"));
+	},
 });
 
-const onMovieSelect = async (movie) => {
+const onMovieSelect = async (movie, summaryElement) => {
 	const response = await axios.get("http://www.omdbapi.com/", {
 		params: {
 			apikey: "9ac9b2e",
 			i: movie.imdbID,
 		},
 	});
-	document.querySelector("#summary").innerHTML = movieTemplate(response.data);
+	summaryElement.innerHTML = movieTemplate(response.data);
 	// console.log(response.data);
 };
 
